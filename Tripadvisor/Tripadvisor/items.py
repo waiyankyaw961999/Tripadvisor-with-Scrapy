@@ -4,10 +4,17 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-from scrapy.loader.processors import MapCompose, TakeFirst, Join
+from itemloaders.processors import TakeFirst, Join, MapCompose
+
 
 def remove_quotations(value):
-    return value.replace(u"\u201d", '').replace(u"\u201c", "")
+    return value.replace(u"\u2022", '')
+
+
+def remove_long_string(value):
+    return value.replace('<div class=\"_1gpq3zsA _1zP41Z7X\"><span class=\"_1Nzq2vxD\">', '').replace(
+        '</span> <!-- -->', '').replace('</div>', '')
+
 
 class TripadvisorItem(scrapy.Item):
     # define the fields for your item here like:
@@ -18,6 +25,14 @@ class TripadvisorItem(scrapy.Item):
     review_count = scrapy.Field(output_processor=TakeFirst())
     grading = scrapy.Field(output_processor=TakeFirst())
     address = scrapy.Field(output_processor=TakeFirst())
+
+
+class ThingstodoItem(scrapy.Item):
+    name = scrapy.Field(input_processor=MapCompose(remove_long_string),
+                        output_processor=TakeFirst())
+    viewer = scrapy.Field(output_processor=TakeFirst())
+    status = scrapy.Field(input_processor=MapCompose(remove_quotations),
+                          output_processor=TakeFirst())
 
 
 """
