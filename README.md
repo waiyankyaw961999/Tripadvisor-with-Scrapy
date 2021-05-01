@@ -5,3 +5,4 @@ Tripadvisor is one of the world's largest travel guidance platforms where you ca
 ## Library
 https://scrapy.org/
 
+I also used BeautifulSoup for scraping Attraction Sites.
